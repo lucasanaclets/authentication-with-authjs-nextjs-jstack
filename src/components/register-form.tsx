@@ -16,12 +16,13 @@ import {
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 
-export function RegisterForm({
-  className,
-  ...props
-}: React.ComponentProps<"div">) {
+interface IRegisterFormProps {
+  registerAction: (formData: FormData) => Promise<void>;
+}
+
+export function RegisterForm({ registerAction }: IRegisterFormProps) {
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <div className="flex flex-col gap-6">
       <Card>
         <CardHeader>
           <CardTitle>Register</CardTitle>
@@ -30,16 +31,23 @@ export function RegisterForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form action={registerAction} noValidate>
             <FieldGroup>
               <Field>
                 <FieldLabel htmlFor="name">Name</FieldLabel>
-                <Input id="name" type="text" placeholder="John Doe" required />
+                <Input
+                  id="name"
+                  name="name"
+                  type="text"
+                  placeholder="John Doe"
+                  required
+                />
               </Field>
               <Field>
                 <FieldLabel htmlFor="email">Email</FieldLabel>
                 <Input
                   id="email"
+                  name="email"
                   type="email"
                   placeholder="m@example.com"
                   required
@@ -50,6 +58,7 @@ export function RegisterForm({
                 <Input
                   id="password"
                   type="password"
+                  name="password"
                   placeholder="********"
                   required
                 />
