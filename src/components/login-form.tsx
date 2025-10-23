@@ -16,12 +16,13 @@ import {
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 
-export function LoginForm({
-  className,
-  ...props
-}: React.ComponentProps<"div">) {
+interface ILoginFormProps {
+  loginAction: (formData: FormData) => Promise<void | { error: string }>;
+}
+
+export function LoginForm({ loginAction }: ILoginFormProps) {
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <div className="flex flex-col gap-6">
       <Card>
         <CardHeader>
           <CardTitle>Login to your account</CardTitle>
@@ -30,12 +31,13 @@ export function LoginForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form action={loginAction}>
             <FieldGroup>
               <Field>
                 <FieldLabel htmlFor="email">Email</FieldLabel>
                 <Input
                   id="email"
+                  name="email"
                   type="email"
                   placeholder="m@example.com"
                   required
@@ -51,7 +53,13 @@ export function LoginForm({
                     Forgot your password?
                   </a>
                 </div>
-                <Input id="password" type="password" required />
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  required
+                  placeholder="********"
+                />
               </Field>
               <Field>
                 <Button type="submit">Login</Button>
