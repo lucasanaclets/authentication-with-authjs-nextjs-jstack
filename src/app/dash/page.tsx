@@ -6,8 +6,6 @@ export default async function Home() {
 
   return (
     <div>
-      <AppBar />
-
       <pre className="p-6">{JSON.stringify(session, null, 2)}</pre>
     </div>
   );
