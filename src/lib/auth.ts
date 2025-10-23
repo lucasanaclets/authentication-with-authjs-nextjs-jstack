@@ -4,7 +4,7 @@ import { db } from "./db";
 import { compare } from "bcryptjs";
 import { loginSchema } from "@/schemas/loginSchema";
 
-export const { signIn, auth } = NextAuth({
+export const { auth, signIn, signOut } = NextAuth({
   providers: [
     Credentials({
       authorize: async (credentials) => {

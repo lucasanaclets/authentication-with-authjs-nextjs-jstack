@@ -1,16 +1,14 @@
 import { auth } from "@/lib/auth";
-import { redirect } from "next/navigation";
+import { AppBar } from "./_components/AppBar";
 
 export default async function Home() {
   const session = await auth();
 
-  if (!session) {
-    redirect("/login");
-  }
-
   return (
     <div>
-      <pre>{JSON.stringify(session, null, 2)}</pre>
+      <AppBar />
+
+      <pre className="p-6">{JSON.stringify(session, null, 2)}</pre>
     </div>
   );
 }
