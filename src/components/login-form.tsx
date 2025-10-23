@@ -1,4 +1,5 @@
-import { cn } from "@/lib/utils";
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,12 +16,27 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { useActionState } from "react";
+
+import { Loader2Icon } from "lucide-react";
+import { toast } from "sonner";
 
 interface ILoginFormProps {
   loginAction: (formData: FormData) => Promise<void | { error: string }>;
 }
 
 export function LoginForm({ loginAction }: ILoginFormProps) {
+  const [, dispatchAction, isPending] = useActionState(
+    async (_previousData: any, formData: FormData) => {
+      const response = await loginAction(formData);
+
+      if (response?.error) {
+        toast.error(response.error);
+      }
+    },
+    null
+  );
+
   return (
     <div className="flex flex-col gap-6">
       <Card>
@@ -31,7 +47,7 @@ export function LoginForm({ loginAction }: ILoginFormProps) {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form action={loginAction}>
+          <form action={dispatchAction} noValidate>
             <FieldGroup>
               <Field>
                 <FieldLabel htmlFor="email">Email</FieldLabel>
@@ -62,8 +78,11 @@ export function LoginForm({ loginAction }: ILoginFormProps) {
                 />
               </Field>
               <Field>
-                <Button type="submit">Login</Button>
-                <Button variant="outline" type="button">
+                <Button disabled={isPending} type="submit">
+                  {!isPending && "Login"}
+                  {isPending && <Loader2Icon className="animate-spin" />}
+                </Button>
+                <Button disabled={isPending} variant="outline" type="button">
                   Login with Google
                 </Button>
                 <FieldDescription className="text-center">
